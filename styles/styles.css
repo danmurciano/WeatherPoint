@@ -12,27 +12,15 @@
 }
 
 .page-index {
-<<<<<<< HEAD
-=======
   min-height: 100vh;
   background-color: #0c0d0d;
 }
-
-.page-main {
->>>>>>> 18ed7287fd83b1a8a4c3858637f926b08ce23635
-  min-height: 100vh;
-  background: radial-gradient(#7bb7ed, rgba(0,0,0,0.9) 240%);
-}
-
-<<<<<<< HEAD
 
 .page-main {
   min-height: 100vh;
   overflow: hidden;
 }
 
-=======
->>>>>>> 18ed7287fd83b1a8a4c3858637f926b08ce23635
 .title-bar {
   text-align: center;
   padding: 0;
