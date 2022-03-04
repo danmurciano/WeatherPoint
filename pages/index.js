@@ -31,12 +31,8 @@ export default function Home() {
 
 
   return (
-<<<<<<< HEAD
     <div class="page-index day-clear">
       <Background conditions="01d"/>
-=======
-    <div class="page-index">
->>>>>>> 18ed7287fd83b1a8a4c3858637f926b08ce23635
       <Header/>
       <div class="container-fluid home-image">
         <div>
