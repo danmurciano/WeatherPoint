@@ -120,7 +120,7 @@ Location.getInitialProps = async ({ query: { search } }) => {
   const longitude = l[4];
 
   const payload = { headers: { "X-Requested-With": "XMLHttpRequest" } };
-  const weatherUrl = `https://dans-proxy.herokuapp.com/https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=imperial&appid=a27a7e6cb45357aa26387fcbdf4621cd`;
+  const weatherUrl = `https://proxy-1wq4.onrender.com/https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=imperial&appid=a27a7e6cb45357aa26387fcbdf4621cd`;
   const weatherResponse = await axios.get(weatherUrl, payload);
   const weatherData = weatherResponse.data;
   return { city, region, country, latitude, longitude, weatherData };
