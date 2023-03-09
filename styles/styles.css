@@ -16,6 +16,11 @@
   background-color: #0c0d0d;
 }
 
+.loading {
+  filter: blur(2px) brightness(0.15);
+  pointer-events: none;
+}
+
 .page-main {
   min-height: 100vh;
   overflow: hidden;

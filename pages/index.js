@@ -9,6 +9,8 @@ import weatherResponse from "../utils/weatherResponse";
 
 export default function Home() {
   const [searchState, setSearchState] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+
   let search = searchState;
   const router = useRouter();
 
@@ -31,12 +33,12 @@ export default function Home() {
 
 
   return (
-    <div class="page-index day-clear">
+      <div className={"page-index day-clear" + (loading ? " loading" : "")}>
       <Background conditions="01d"/>
-      <Header/>
-      <div class="container-fluid home-image">
+      <Header setLoading={setLoading} />
+      <div className="container-fluid home-image">
         <div>
-          <img class="home-image-front" />
+          <img className="home-image-front" />
         </div>
       </div>
       <Footer/>

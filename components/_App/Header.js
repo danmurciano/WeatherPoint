@@ -8,7 +8,7 @@ import Favorites from "./Favorites";
 import FavoritesSmall from "./FavoritesSmall";
 
 
-function Header({ units, setUnits }) {
+function Header({ units, setUnits, setLoading }) {
   const router = useRouter();
 
   const smallScreen = isSmallScreen();
@@ -53,7 +53,7 @@ function Header({ units, setUnits }) {
 
         <div class="col-xl-6 col-lg-5 col-md-5 col-sm-12">
           <div class="search-div">
-            <SearchBar/>
+            <SearchBar setLoading={setLoading} />
           </div>
         </div>
 
@@ -70,9 +70,9 @@ function Header({ units, setUnits }) {
 
       <div class="row favorites-row">
         {smallScreen ? (
-          <FavoritesSmall/>
+          <FavoritesSmall setLoading={setLoading} />
         ) : (
-          <Favorites/>
+          <Favorites setLoading={setLoading} />
         )}
       </div>
     </div>

@@ -11,11 +11,16 @@ import { Icon, Menu } from "semantic-ui-react";
 import { countries } from "../public/countries";
 import weatherResponse from "../utils/weatherResponse";
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import NProgress from "nprogress";
+
+NProgress.configure({ easing: 'ease', speed: 150 });
 
 
 export default function Location({ city, region, country, latitude, longitude, weatherData, units }) {
+  NProgress.done();
   let cookies = parseCookies();
   const [unitsState, setUnitsState] = React.useState(units);
+  const [loading, setLoading] = React.useState(false);
 
   const weather = weatherResponse(weatherData);
   const router = useRouter();
@@ -57,9 +62,9 @@ export default function Location({ city, region, country, latitude, longitude, w
 
   return (
     <>
-    <div class={`page-main ${background}`}>
+    <div className={`page-main ${background}`}>
       <Background conditions={weather.current.icon} />
-      <Header units={unitsState} setUnits={setUnitsState} />
+      <Header units={unitsState} setUnits={setUnitsState} setLoading={setLoading} />
       <div class="page-location ">
         <div class="location-main">
           <div class="location-results">
@@ -100,11 +105,6 @@ export default function Location({ city, region, country, latitude, longitude, w
 
           </div>
         </div>
-
-        <div class="container-fluid footer">
-
-        </div>
-
       </div>
     </div>
     </>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { useRouter } from "next/router";
 import { Menu, Button, Icon } from 'semantic-ui-react';
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
@@ -6,11 +6,11 @@ import getLocationName from "../../utils/getLocationName";
 import NProgress from "nprogress";
 
 
-export default function Favorites() {
+export default function Favorites({ setLoading }) {
   const [page, setPage] = React.useState(0);
   const router = useRouter();
   const cookies = parseCookies();
-
+  
 
   let locations = [];
   let length;
@@ -30,12 +30,12 @@ export default function Favorites() {
       path: '/',
     })
   ))
-
+ 
 
   async function handleSelect(event, value) {
     NProgress.start();
+    setLoading(true);
     router.push(`/location?search=${value}`);
-    NProgress.done();
   }
 
 

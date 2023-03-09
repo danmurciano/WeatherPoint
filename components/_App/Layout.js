@@ -1,7 +1,6 @@
 import Head from "next/head";
 import { Container } from "react-bootstrap";
 import HeadContent from "./HeadContent";
-// import Header from "./Header";
 
 
 function Layout({ children }) {

@@ -101,11 +101,6 @@ export default function SearchedLocation({ city, region, country, latitude, long
 
           </div>
         </div>
-
-        <div class="container-fluid footer">
-
-        </div>
-
       </div>
     </div>
     </>

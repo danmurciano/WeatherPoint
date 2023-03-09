@@ -3,9 +3,10 @@ import { useRouter } from "next/router";
 import { Menu, Button, Icon } from 'semantic-ui-react';
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
 import getLocationName from "../../utils/getLocationName";
+import NProgress from "nprogress";
 
 
-export default function FavoritesSmall() {
+export default function FavoritesSmall({ setLoading }) {
   const [page, setPage] = React.useState(0);
   const router = useRouter();
   const cookies = parseCookies();
@@ -13,7 +14,6 @@ export default function FavoritesSmall() {
 
   let locations = [];
   let length;
-
 
   for (const [key, value] of Object.entries(cookies)) {
     if (key !== "currentLocation" && key !== "units") {
@@ -33,6 +33,8 @@ export default function FavoritesSmall() {
 
 
   async function handleSelect(event, value) {
+    NProgress.start();
+    setLoading(true);
     router.push(`/location/?search=${value}`);
   }
 
