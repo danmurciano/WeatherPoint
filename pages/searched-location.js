@@ -108,7 +108,7 @@ export default function SearchedLocation({ city, region, country, latitude, long
 }
 
 SearchedLocation.getInitialProps = async ({ query: { search } }) => {
-  const geoUrl = `https://open.mapquestapi.com/geocoding/v1/address?key=jSNsxG2R1gZVxGcNiVs3YB53STD5yrU3&location=${search}&maxResults=1&thumbMaps=true`;
+  const geoUrl = `https://proxy-1wq4.onrender.com/https://open.mapquestapi.com/geocoding/v1/address?key=jSNsxG2R1gZVxGcNiVs3YB53STD5yrU3&location=${search}&maxResults=1&thumbMaps=true`;
   const payload = { headers: { "X-Requested-With": "XMLHttpRequest" } };
   const geoResponse = await axios.get(geoUrl, payload);
   const geoData = geoResponse.data.results[0].locations[0];

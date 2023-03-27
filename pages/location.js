@@ -58,8 +58,6 @@ export default function Location({ city, region, country, latitude, longitude, w
   }
 
 
-
-
   return (
     <>
     <div className={`page-main ${background}`}>
