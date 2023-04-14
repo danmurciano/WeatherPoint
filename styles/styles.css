@@ -7,13 +7,13 @@
 }
 
 .screen-adjust {
-  min-width: 600px;
+  min-width: 500px;
   min-height: 100vh;
 }
 
 .page-index {
-  min-height: 100vh;
-  background-color: #0c0d0d;
+  height: 100vh;
+  background-image: url("/images/loading-image2.jpg");
 }
 
 .loading {
@@ -53,17 +53,42 @@ h2 {
 }
 
 
-
-.home-image {
+.loading-image {
   text-align: center !important;
 }
 
-.home-image-front {
+
+.home-image-loading {
   content: url("/images/banner_front.png");
   width: 100vw;
-  max-width: 600px;
-  padding: 33vh 64px;
+  max-width: 480px;
+  padding: 0 4%;
   margin: auto !important;
+}
+
+.loading-image {
+  background-image: url("/images/loading-image2.jpg");
+  height: 100vh;
+  background-size: cover;
+  background-position: 50%, 50%;
+}
+
+.app-loading {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.app-loading p {
+  font-size: 18px;
+  color: #37b6bf;
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+.AppLoading {
+  margin: auto;
 }
 
 
@@ -500,7 +525,11 @@ span {
 /* Footer */
 
 .footer {
-  padding: 40px 0;
+  padding: 32px 0;
+  position: fixed;
+  bottom: 0%;
+  left: 50%;
+  transform: translate(-50%, 0%);
 }
 
 footer p {

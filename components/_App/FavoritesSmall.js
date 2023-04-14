@@ -59,7 +59,7 @@ export default function FavoritesSmall({ setLoading }) {
 
     return locations.map(location => (
       <Menu.Item className="favorites-menu-item-small">
-        <Icon name="map marker" color="teal"/>
+        <Icon name="map marker"/>
         <Button className="favorites-menu-button" onClick={() => handleSelect(event, location)}>
           <p className="favorites-city">{location.split(",")[0]} </p>
           <p className="favorites-regionAndCountry"> {getLocationName(location).split(" | ")[1]} </p>

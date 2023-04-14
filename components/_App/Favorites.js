@@ -22,6 +22,8 @@ export default function Favorites({ setLoading }) {
     }
   }
 
+  console.log("locations:", locations);
+
 
 // Extends favorites cookies for 1 year everytime this element loads
   locations.map(location => (

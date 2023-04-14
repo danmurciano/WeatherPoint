@@ -54,9 +54,9 @@ export default function SearchBar({ setLoading }) {
   async function handleSelect(event, newValue) {
     if (newValue) {
       if (typeof(newValue) === "string") {
-        // NProgress.start();
-        // setLoading(true);
-        // router.push(`/searched-location/?search=${inputValue}`);
+        NProgress.start();
+        setLoading(true);
+        router.push(`/searched-location/?search=${inputValue}`);
       } else if (typeof(newValue) === "object") {
         let selectedLocation = Object.values(newValue)
         selectedLocation.join();

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Background from "../components/Location/Background";
@@ -11,18 +11,20 @@ import { Icon, Menu } from "semantic-ui-react";
 import { countries } from "../public/countries";
 import weatherResponse from "../utils/weatherResponse";
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
+import NProgress from "nprogress";
+
+NProgress.configure({ easing: 'ease', speed: 150 });
 
 
 export default function SearchedLocation({ city, region, country, latitude, longitude, weatherData, units }) {
+  NProgress.done();
   let cookies = parseCookies();
   const [unitsState, setUnitsState] = React.useState(units);
+  const [loading, setLoading] = React.useState(false);
 
   const weather = weatherResponse(weatherData);
   const router = useRouter();
 
-
-  const i = countries.findIndex(el => el.code === country);
-  country = countries[i].name;
 
   const locationInfo = city + "," + region + "," + country + "," + latitude + "," + longitude;
 
@@ -60,7 +62,7 @@ export default function SearchedLocation({ city, region, country, latitude, long
     <>
       <div class={`page-main ${background}`}>
       <Background conditions={weather.current.icon} />
-      <Header units={unitsState} setUnits={setUnitsState} />
+      <Header units={unitsState} setUnits={setUnitsState} setLoading={setLoading} />
       <div class="page-location">
         <div class="location-main">
           <div class="location-results">
@@ -108,18 +110,19 @@ export default function SearchedLocation({ city, region, country, latitude, long
 }
 
 SearchedLocation.getInitialProps = async ({ query: { search } }) => {
-  const geoUrl = `https://proxy-1wq4.onrender.com/https://open.mapquestapi.com/geocoding/v1/address?key=jSNsxG2R1gZVxGcNiVs3YB53STD5yrU3&location=${search}&maxResults=1&thumbMaps=true`;
-  const payload = { headers: { "X-Requested-With": "XMLHttpRequest" } };
-  const geoResponse = await axios.get(geoUrl, payload);
-  const geoData = geoResponse.data.results[0].locations[0];
-  const city = geoData.adminArea5;
-  const region = geoData.adminArea3;
-  const country = geoData.adminArea1;
-  const latitude = geoData.latLng.lat;
-  const longitude = geoData.latLng.lng;
+  const geoUrl = `https://proxy-1wq4.onrender.com/https://api.radar.io/v1/geocode/forward?query=${search}`;
+  const geoPayload = { headers: { "Authorization": process.env.MAPQUEST_KEY } };
+  const geoResponse = await axios.get(geoUrl, geoPayload);
+  const geoData = geoResponse.data.addresses[0];
+  const city = geoData.neighborhood ? geoData.neighborhood : geoData.city;
+  const region = geoData.state;
+  const country = geoData.country;
+  const latitude = geoData.latitude;
+  const longitude = geoData.longitude;
 
-  const weatherUrl = `https://proxy-1wq4.onrender.com/https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=imperial&appid=a27a7e6cb45357aa26387fcbdf4621cd`;
-  const weatherResponse = await axios.get(weatherUrl, payload);
+  const weatherUrl = `https://proxy-1wq4.onrender.com/https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=imperial&appid=${process.env.WEATHER_KEY}`;
+  const weatherPayload = { headers: { "X-Requested-With": "XMLHttpRequest" } };
+  const weatherResponse = await axios.get(weatherUrl, weatherPayload);
   const weatherData = weatherResponse.data;
   return { city, region, country, latitude, longitude, weatherData };
 };
