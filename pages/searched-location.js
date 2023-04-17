@@ -111,7 +111,7 @@ export default function SearchedLocation({ city, region, country, latitude, long
 
 SearchedLocation.getInitialProps = async ({ query: { search } }) => {
   const geoUrl = `https://proxy-1wq4.onrender.com/https://api.radar.io/v1/geocode/forward?query=${search}`;
-  const geoPayload = { headers: { "Authorization": process.env.MAPQUEST_KEY } };
+  const geoPayload = { headers: { "Authorization": "prj_live_pk_908ae704a7ec458b3aa289281711cf098f68af5a" } };
   const geoResponse = await axios.get(geoUrl, geoPayload);
   const geoData = geoResponse.data.addresses[0];
   const city = geoData.neighborhood ? geoData.neighborhood : geoData.city;
@@ -120,7 +120,7 @@ SearchedLocation.getInitialProps = async ({ query: { search } }) => {
   const latitude = geoData.latitude;
   const longitude = geoData.longitude;
 
-  const weatherUrl = `https://proxy-1wq4.onrender.com/https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=imperial&appid=${process.env.WEATHER_KEY}`;
+  const weatherUrl = `https://proxy-1wq4.onrender.com/https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=imperial&appid=a27a7e6cb45357aa26387fcbdf4621cd`;
   const weatherPayload = { headers: { "X-Requested-With": "XMLHttpRequest" } };
   const weatherResponse = await axios.get(weatherUrl, weatherPayload);
   const weatherData = weatherResponse.data;

@@ -117,7 +117,7 @@ Location.getInitialProps = async ({ query: { search } }) => {
   const latitude = l[3];
   const longitude = l[4];
 
-  const weatherUrl = `https://proxy-1wq4.onrender.com/https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=imperial&appid=${process.env.WEATHER_KEY}`;
+  const weatherUrl = `https://proxy-1wq4.onrender.com/https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&units=imperial&appid=a27a7e6cb45357aa26387fcbdf4621cd`;
   const weatherPayload = { headers: { "X-Requested-With": "XMLHttpRequest" } };
   const weatherResponse = await axios.get(weatherUrl, weatherPayload);
   const weatherData = weatherResponse.data;
