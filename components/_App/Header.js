@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from "next/router";
 import { Icon } from "semantic-ui-react";
 import UnitSelect from "./UnitSelect";
-import UnitSelectSmall from "./UnitSelectSmall";
 import SearchBar from "./SearchBar";
 import Favorites from "./Favorites";
 import FavoritesSmall from "./FavoritesSmall";
 
 
-function Header({ units, setUnits, setLoading }) {
+function Header() {
   const router = useRouter();
 
   const smallScreen = isSmallScreen();
@@ -53,14 +52,14 @@ function Header({ units, setUnits, setLoading }) {
 
         <div class="col-xl-6 col-lg-5 col-md-5 col-sm-12">
           <div class="search-div">
-            <SearchBar setLoading={setLoading} />
+            <SearchBar />
           </div>
         </div>
 
-        {router.pathname.startsWith("/location") || router.pathname.startsWith("/searched-location") ? (
+        {router.pathname.startsWith("/location") ? (
           <div class="col col-units">
             <div>
-              <UnitSelect units={units} setUnits={setUnits} smallScreen={smallScreen}/>
+              <UnitSelect smallScreen={smallScreen}/>
             </div>
           </div>
         ) : (
@@ -70,9 +69,9 @@ function Header({ units, setUnits, setLoading }) {
 
       <div class="row favorites-row">
         {smallScreen ? (
-          <FavoritesSmall setLoading={setLoading} />
+          <FavoritesSmall />
         ) : (
-          <Favorites setLoading={setLoading} />
+          <Favorites />
         )}
       </div>
     </div>

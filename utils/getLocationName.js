@@ -1,8 +1,18 @@
 export default function getLocationName(location) {
-  location = location.split(",");
-  if (location[1] !== "" && location[1] !== location[0]) {
-    return location[0] + " | " + location[1] + ", "  + location[2];
+  const { city, region, country, lat, lng } = location;
+  const latitude = lat;
+  const longitude = lng;
+
+  let regionAndCountry;
+  if (region !== "" && region !== city) {
+    regionAndCountry = `${region}, ${country}`;
   } else {
-    return location[0] + " | " + location[2];
+    regionAndCountry = country;
   }
+
+  const label = `${city}, ${regionAndCountry}`;
+  const queryString = `${city},${region},${country},${latitude},${longitude}`;
+
+
+  return { city, region, country, latitude, longitude, regionAndCountry, label, queryString }
 }

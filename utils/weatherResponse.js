@@ -132,10 +132,6 @@ export default function weatherResponse(weather) {
     uvi: Math.round(weather.current.uvi)
   }
 
-  const currentMetric = {
-    pressure: weather.current.pressure,
-  }
-
 
   function mapDailyData(daily) {
     return daily.map(d => ({
@@ -184,11 +180,31 @@ export default function weatherResponse(weather) {
   let hourly = mapHourlyData(weather.hourly.slice(1, 24));
   hourly.unshift(hourlyNow);
 
-  return { coordinates, current, currentMetric, daily, hourly };
+
+  // Get appropriate background
+  const timeOfDay = weather.current.weather[0].icon.substring(2,3);
+  const conditions = weather.current.weather[0].icon.substring(0,2);
+  const clear = ["01", "02"];
+  const overcast = ["03", "04", "09", "10", "11", "13", "50"];
+
+  let background = "day-clear"
+  if (timeOfDay === "d" && clear.includes(conditions)) {
+    background = "day-clear";
+  } else if (timeOfDay === "d" && overcast.includes(conditions)) {
+    background = "day-overcast"
+  } else if (timeOfDay === "n" && clear.includes(conditions)) {
+    background = "night-clear";
+  } else if (timeOfDay === "n" && overcast.includes(conditions)) {
+    background = "night-overcast";
+  }
+
+
+  return { coordinates, current, daily, hourly, timeOfDay, background };
 }
 
 
 
+// Example Response
 
 // {
 //   "lat": 33.44,

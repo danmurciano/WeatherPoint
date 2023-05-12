@@ -1,13 +1,13 @@
-import React, { Component, useState } from 'react';
+import React, { Component, useState, useContext } from 'react';
 import { useRouter } from "next/router";
 import { Menu, Button, Icon } from 'semantic-ui-react';
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
-import getLocationName from "../../utils/getLocationName";
-import NProgress from "nprogress";
+import { AppContext } from './AppContext';
 
 
-export default function Favorites({ setLoading }) {
-  const [page, setPage] = React.useState(0);
+export default function Favorites() {
+  const { connected, loading, setLoading } = useContext(AppContext);
+  const [page, setPage] = useState(0);
   const router = useRouter();
   const cookies = parseCookies();
   
@@ -16,8 +16,14 @@ export default function Favorites({ setLoading }) {
   let length;
 
   for (const [key, value] of Object.entries(cookies)) {
-    if (key !== "currentLocation" && key !== "units") {
-      locations.push(value);
+    if (key !== "units") {    
+      let location = {
+        label: key,
+        city: key.split(",")[0],
+        regionAndCountry: key.split(",")[1],
+        queryString: value
+      }
+      locations.push(location);
       length = locations.length;
     }
   }
@@ -25,27 +31,25 @@ export default function Favorites({ setLoading }) {
 
 // Extends favorites cookies for 1 year everytime this element loads
   locations.map(location => (
-    setCookie(null, getLocationName(location), location, {
+    setCookie(null, location.label, location.queryString, {
       maxAge: 365 * 24 * 3600,
       path: '/',
     })
   ))
  
 
-  async function handleSelect(event, value) {
-    NProgress.start();
-    setLoading(true);
+  async function handleSelect(value) {
     router.push(`/location?search=${value}`);
   }
 
 
-  function removeLocation(event, value) {
-    destroyCookie(null, getLocationName(value));
+  function removeLocation(location) {
+    destroyCookie(null, location.label);
     router.reload();
   }
 
 
-  function scrollPage(event, value) {
+  function scrollPage(value) {
     setPage(page + value);
   }
 
@@ -59,11 +63,11 @@ export default function Favorites({ setLoading }) {
     return locations.map(location => (
       <Menu.Item className="favorites-menu-item">
         <Icon name="map marker"/>
-        <Button className="favorites-menu-button" onClick={() => handleSelect(event, location)}>
-          <p className="favorites-city">{location.split(",")[0]} </p>
-          <p className="favorites-regionAndCountry"> {getLocationName(location).split(" | ")[1]} </p>
+        <Button className="favorites-menu-button" onClick={() => handleSelect(location.queryString)}>
+          <p className="favorites-city"> {location.city} </p>
+          <p className="favorites-regionAndCountry"> {location.regionAndCountry} </p>
         </Button>
-        <Button className="remove-button" onClick={() => removeLocation(event, location)}>
+        <Button className="remove-button" onClick={() => removeLocation(location)}>
           <Icon name="trash alternate"/>
         </Button>
        </Menu.Item>
@@ -77,7 +81,7 @@ export default function Favorites({ setLoading }) {
         <>
         {page > 0 ? (
           <div class="arrow-col">
-            <Button className="arrow-button" basic active="false" onClick={() => scrollPage(event, -1)} >
+            <Button className="arrow-button" basic active="false" onClick={() => scrollPage(-1)} >
               <Icon className="carousel-arrow" name="chevron left" size="big" />
             </Button>
           </div>
@@ -97,7 +101,7 @@ export default function Favorites({ setLoading }) {
 
         {page < length - 4 ? (
           <div class="arrow-col">
-            <Button className="arrow-button" basic active="false" onClick={() => scrollPage(event, 1)} >
+            <Button className="arrow-button" basic active="false" onClick={() => scrollPage(1)} >
               <Icon className="carousel-arrow" name="chevron right" size="big" />
             </Button>
           </div>

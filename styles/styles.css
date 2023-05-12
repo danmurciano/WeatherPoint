@@ -53,10 +53,18 @@ h2 {
 }
 
 
-.loading-image {
+.home-image, .loading-image {
   text-align: center !important;
 }
 
+
+.home-image-front {
+  content: url("/images/banner_front.png");
+  width: 100vw;
+  max-width: 600px;
+  padding: 33vh 64px;
+  margin: auto !important;
+}
 
 .home-image-loading {
   content: url("/images/banner_front.png");
@@ -174,6 +182,7 @@ h2 {
 .MuiIconButton-root:hover {
   visibility: hidden !!important;
 }
+
 
 legend {
   visibility: hidden;

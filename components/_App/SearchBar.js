@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useRouter } from "next/router";
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -7,8 +7,10 @@ import { Form, Input, Button, Icon } from "semantic-ui-react";
 import { makeStyles } from '@material-ui/core/styles';
 import { cityList } from "../../public/city-list";
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
-import NProgress from "nprogress";
-
+import baseUrl from '../../utils/baseUrl';
+import axios from 'axios';
+import { AppContext } from './AppContext';
+import getLocationName from "../../utils/getLocationName";
 
 const options = cityList;
 
@@ -25,9 +27,10 @@ const useStyles = makeStyles({
 });
 
 
-export default function SearchBar({ setLoading }) {
+export default function SearchBar() {
   const classes = useStyles();
-  const [inputValue, setInputValue] = React.useState("");
+  const [inputValue, setInputValue] = useState("");
+  const { connected, setLoading } = useContext(AppContext);
 
   const router = useRouter();
 
@@ -43,73 +46,71 @@ export default function SearchBar({ setLoading }) {
   }
 
 
-  async function handleSearch(event) {
-    if (inputValue.length > 1) {
-      router.push(`/location/?search=${inputValue}`);
-      setInputValue("");
-    }
-  }
-
-
   async function handleSelect(event, newValue) {
     if (newValue) {
+      let selectedLocation = getLocationName(newValue);
+      if (!connected) setLoading("Establishing connection to weather API. Please be patient.");
+ 
       if (typeof(newValue) === "string") {
-        NProgress.start();
-        setLoading(true);
-        router.push(`/searched-location/?search=${inputValue}`);
-      } else if (typeof(newValue) === "object") {
-        let selectedLocation = Object.values(newValue)
-        selectedLocation.join();
-        NProgress.start();
-        setLoading(true);
-        router.push(`/location/?search=${selectedLocation}`);
+        if (newValue.length > 2) {
+          try {
+            const url = `${baseUrl}/api/searched-location`;
+            const payload = {params: { search: newValue } };
+            const geoResponse = await axios.get(url, payload);
+            selectedLocation = getLocationName(geoResponse.data);
+          } catch (error) {
+            setLoading(error.response.data);
+            return;
+          }
+        }
       }
+      
+      router.push(`/location/?search=${selectedLocation.queryString}`);
       setInputValue("");
     }
   }
 
-  function getLocationLabel(location) {
-    if (location.region !== "" && location.region !== location.city) {
-      return location.city + ", " + location.region + ", " + location.country;
-    } else {
-      return location.city + ", " + location.country;
-    }
-  }
 
 
   return (
-    <div class="row search-bar">
-      <Autocomplete
-        onChange={(event, newValue) => {handleSelect(event, newValue)}}
-        inputValue={inputValue}
-        onInputChange={(event, newInputValue) => {setInputValue(newInputValue)}}
-        id="controllable-states-demo"
-        options={inputValue.length < 3 ? [] : options}
-        getOptionLabel={inputValue.length < 3 ? option => "" : option => getLocationLabel(option)}
-        style={{ width: 300 }}
-        renderInput={(params) => <TextField {...params} label="Search City or Zip Code" variant="outlined" />}
-        filterOptions={filterOptions}
-        size="small"
-        freeSolo
-      />
+    <>
+      <div class="row search-bar">
+        <Autocomplete
+          onChange={(event, value) => {
+            if(!value === null) {
+              value = "";
+            }
+            handleSelect(event, value)
+          }}
+          inputValue={inputValue}
+          onInputChange={(event, newInputValue) => {setInputValue(newInputValue)}}
+          id="controllable-states-demo"
+          options={inputValue.length < 3 ? [] : options}
+          getOptionLabel={inputValue.length < 3 ? option => "" : option => getLocationName(option).label}
+          style={{ width: 300 }}
+          renderInput={(params) => <TextField {...params} label="Search City or Zip Code" variant="outlined" />}
+          filterOptions={filterOptions}
+          size="small"
+          freeSolo
+        />
 
-      {inputValue.length > 0 ? (
-        <Button
-          size="small"
-          className={inputValue.length > 0 ? "searchBarButton" : "hidden-button"}
-          type="clear"
-          icon="delete"
-          onClick={handleClearSearch}
-        />
-      ) : (
-        <Button
-          size="small"
-          className="searchBarButton"
-          type="submit"
-          icon="search"
-          onClick={handleSearch}
-        />
-      )}
-    </div>
+        {inputValue.length > 0 ? (
+          <Button
+            size="small"
+            className={inputValue.length > 0 ? "searchBarButton" : "hidden-button"}
+            type="clear"
+            icon="delete"
+            onClick={handleClearSearch}
+          />
+        ) : (
+          <Button
+            size="small"
+            className="searchBarButton"
+            type="submit"
+            icon="search"
+          />
+        )}
+      </div>
+    </>
   );
 }

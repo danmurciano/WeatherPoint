@@ -1,28 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useRouter } from "next/router";
 import { Button, Icon, Popup } from 'semantic-ui-react';
 import { parseCookies, setCookie, destroyCookie } from 'nookies';
 import getLocationName from "../../utils/getLocationName";
+import { AppContext } from './AppContext';
 
 
-export default function UnitSelect({ units, setUnits, smallScreen }) {
+export default function UnitSelect({ smallScreen }) {
   const router = useRouter();
   let cookies = parseCookies();
 
-  const [unitsState, setUnitsState] = React.useState(units);
-  let currentLocation;
+  const { units, setUnits, location } = useContext(AppContext);
 
 
-  for (const [key, value] of Object.entries(cookies)) {
-    if (key === "currentLocation") {
-      currentLocation = value;
-    }
-  }
-
-
-  function saveLocation(event, value) {
-    const locationName = getLocationName(value);
-    setCookie(null, locationName, value, {
+  function saveLocation() {
+    setCookie(null, location.label, location.queryString, {
       maxAge: 365 * 24 * 3600,
       path: '/',
     })
@@ -32,7 +24,6 @@ export default function UnitSelect({ units, setUnits, smallScreen }) {
 
   async function handleSelect(event, value) {
     setUnits(value);
-    setUnitsState(value);
     setCookie(null, "units", value, {
       maxAge: 365 * 24 * 3600,
       path: '/',
@@ -44,14 +35,14 @@ export default function UnitSelect({ units, setUnits, smallScreen }) {
     <div className="units-div">
       <Button.Group size="small" className="unit-buttons">
         <Button
-          className={unitsState === 0 ? "active-button" : "unit-button" }
+          className={units === 0 ? "active-button" : "unit-button" }
           onClick={() => handleSelect(event, 0)}
         >
           {smallScreen ? String.fromCharCode(176) + "F" : String.fromCharCode(176) + "F, mph"}
         </Button>
         <div class="line"> </div>
         <Button
-          className={unitsState === 1 ? "active-button" : "unit-button" }
+          className={units === 1 ? "active-button" : "unit-button" }
           onClick={() => handleSelect(event, 1)}
         >
           {smallScreen ? String.fromCharCode(176) + "C" : String.fromCharCode(176) + "C, kmh"}
@@ -67,7 +58,7 @@ export default function UnitSelect({ units, setUnits, smallScreen }) {
         position="bottom"
         content= { <p>Save Current Location</p> }
         trigger= {
-          <Button className="save-button" onClick={() => saveLocation(event, currentLocation)}>
+          <Button className="save-button" onClick={() => saveLocation()}>
             <Icon name="map marker"/>
             Save
           </Button>

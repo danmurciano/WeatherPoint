@@ -1,15 +1,20 @@
 import Head from "next/head";
 import { Container } from "react-bootstrap";
 import HeadContent from "./HeadContent";
+import { useContext } from 'react';
+import { AppContext } from './AppContext';
 
 
 function Layout({ children }) {
+  const { location } = useContext(AppContext);
+
+  const metaText = location ? `${location.label} - Weather Forecast and Conditions` : `WeatherPoint - Daily Forecast, Hourly Forecast, Weather Conditions`
 
   return (
     <>
       <Head>
         <HeadContent />
-        <title>WeatherPoint</title>
+        <title> {metaText} </title>
       </Head>
 
       <div class="screen-adjust">
