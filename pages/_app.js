@@ -1,5 +1,3 @@
-import App from "next/app";
-import React from "react";
 import Layout from "../components/_App/Layout";
 import { AppProvider, AppContext } from "../components/_App/AppContext";
 import 'bootstrap/dist/css/bootstrap.min.css';

@@ -15,6 +15,7 @@ function Layout({ children }) {
       <Head>
         <HeadContent />
         <title> {metaText} </title>
+        <meta property="og:image" content="/public/images/weather-point.jpg" />
       </Head>
 
       <div class="screen-adjust">
